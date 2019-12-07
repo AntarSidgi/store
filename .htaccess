@@ -1,0 +1,33 @@
+# The following will allow you to use URLs such as the following:
+#
+#   antar.sd/link
+#   antar.sd/link/
+#
+# Which will actually serve files such as the following:
+#
+#   antar.sd/link.html
+#   antar.sd/link.php
+#
+# But *only if they exist*, otherwise it will report the usual 404 error.
+
+Options +FollowSymLinks
+RewriteEngine On
+
+# Remove trailing slashes.
+# e.g. antar.sd/asa/ will redirect to antar.sd/asa
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ /$1 [R=permanent,QSA]
+
+# Redirect to HTML if it exists.
+# e.g. antar.sd/asa will display the contents of antar.sd/asa.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+)$ $1.html [L,QSA]
+
+# Redirect to PHP if it exists.
+# e.g. antar.sd/asa will display the contents of antar.sd/asa.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L,QSA]
